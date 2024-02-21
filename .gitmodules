@@ -1,0 +1,7 @@
+[submodule "external/ouster_example"]
+	path = external/ouster_example
+	url = git@github.com:ouster-lidar/ouster_example.git
+
+[submodule "external/json"]
+	path = external/json
+	url = git@github.com:nlohmann/json.git

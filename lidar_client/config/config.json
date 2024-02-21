@@ -1,0 +1,9 @@
+{
+  "host": "0.0.0.0",
+  "port": 8080,
+  "pcapPath": "../data/OS-1-128_v3.0.1_4096x5_20230216_144134-000.pcap",
+  "jsonPath": "../data/OS-1-128_v3.0.1_4096x5_20230216_144134.json",
+  "packetBufferSize": 65536,
+  "pointsPerBatch": 100,
+  "distanceThreshold": 15
+}
