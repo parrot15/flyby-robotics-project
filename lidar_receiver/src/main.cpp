@@ -2,7 +2,7 @@
 #include "utils.h"
 #include "lidar_receiver.h"
 
-const Config config = read_config_file("../config/config.json");
+const Config config = read_config_file("lidar_receiver/config/config.json");
 
 int main() {
     LidarReceiver lidar_receiver;

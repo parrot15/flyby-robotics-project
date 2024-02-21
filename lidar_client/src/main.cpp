@@ -2,7 +2,7 @@
 #include "utils.h"
 #include "lidar_client.h"
 
-const Config config = read_config_file("../config/config.json");
+const Config config = read_config_file("lidar_client/config/config.json");
 
 int main() {
     auto handle = read_playback_data(config.pcap_path);
