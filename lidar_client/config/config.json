@@ -1,5 +1,5 @@
 {
-  "host": "0.0.0.0",
+  "host": "34.221.199.148",
   "port": 8080,
   "pcapPath": "lidar_client/data/OS-1-128_v3.0.1_4096x5_20230216_144134-000.pcap",
   "jsonPath": "lidar_client/data/OS-1-128_v3.0.1_4096x5_20230216_144134.json",

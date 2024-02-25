@@ -1,0 +1,5 @@
+# Project build files
+/build
+
+# Ouster SDK build files
+/external/ouster_example/build

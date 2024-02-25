@@ -11,7 +11,7 @@ LidarReceiver::~LidarReceiver() {
 void LidarReceiver::listen(const std::string& host, int port) {
     acceptor_ = std::make_unique<tcp::acceptor>(
         ioc_,
-        tcp::endpoint{net::ip::make_address(host), static_cast<net::ip::port_type>(port)}
+        tcp::endpoint{net::ip::make_address(host), static_cast<unsigned short>(port)}
     );
     tcp_socket_ = std::make_unique<tcp::socket>(ioc_);
     std::cout << "Listening for lidar client." << std::endl;
