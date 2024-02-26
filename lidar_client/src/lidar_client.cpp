@@ -33,10 +33,7 @@ void LidarClient::process_scan(int packet_buffer_size, int points_per_batch) {
     ouster::LidarScan scan(w, h, meta_.format.udp_profile_lidar);
 
     // Send total number of points to lidar receiver.
-    json num_points_msg = {
-        {"num_points", w * h}
-    };
-    ws_.write(net::buffer(num_points_msg.dump()));
+    send_num_points(num_points);
     std::cout << "Sent number of points (" << num_points << ") to lidar receiver." << std::endl;
 
     // Buffer to store raw packet data.
@@ -85,7 +82,18 @@ void LidarClient::disconnect() {
     }
 }
 
-bool LidarClient::is_within_distance(double x, double y, double z) {
+void LidarClient::write_message(const json& message) {
+    ws_.write(net::buffer(message.dump()));
+}
+
+void LidarClient::send_num_points(size_t num_points) {
+    json num_points_msg = {
+        {"num_points", num_points}
+    };
+    write_message(num_points_msg);
+}
+
+bool LidarClient::is_within_distance(double x, double y, double z) const {
     return std::sqrt(std::pow(x, 2) + std::pow(y, 2) + std::pow(z, 2)) < distance_threshold_;
 }
 
@@ -116,7 +124,7 @@ void LidarClient::process_coords(const ouster::LidarScan& scan, int points_per_b
             }
         }
         if (!batch_json["points"].empty()) {
-            ws_.write(net::buffer(batch_json.dump()));
+            write_message(batch_json);
         }
     }
 }

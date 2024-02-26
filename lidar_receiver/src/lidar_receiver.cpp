@@ -59,7 +59,7 @@ void LidarReceiver::stop() {
     }
 }
 
-json LidarReceiver::read_message() {
+json LidarReceiver::read_message() const {
     beast::flat_buffer buffer;
     ws_->read(buffer);
     auto msg = beast::buffers_to_string(buffer.data());
@@ -77,7 +77,7 @@ void LidarReceiver::receive_num_points() {
     std::cout << "Received number of points (" << num_points_ << ") from lidar client." << std::endl;
 }
 
-void LidarReceiver::message_handler(std::shared_ptr<ouster::viz::Cloud> cloud) {
+void LidarReceiver::message_handler(std::shared_ptr<ouster::viz::Cloud> cloud) const {
     try {
         // Flattened list to hold all coordinates in a frame,
         // as per Ouster SDK expectations.
