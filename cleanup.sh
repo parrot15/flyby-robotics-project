@@ -10,11 +10,13 @@ if [ $# -ne 1 ]; then
 fi
 
 if [ $1 == "receiver" ]; then
-    echo "Building receiver Docker container..."
-    docker build -f lidar_receiver/Dockerfile -t lidar_receiver .
+    # Stop and remove the receiver container.
+    docker stop receiver && docker rm receiver
+    # remove VNC server instance.
+    vncserver -kill :1
 elif [ $1 == "client" ]; then
-    echo "Building client Docker container..."
-    docker build -f lidar_client/Dockerfile -t lidar_client .
+    # Stop and remove the client container.
+    docker stop client && docker rm client
 else
     echo "Invalid argument: $1"
     echo "Please specify 'receiver' or 'client'."

@@ -1,47 +1,32 @@
 #!/bin/bash
 
-# Initialize variables.
-TARGET=""
+# Navigate to the project root directory.
+cd "$(dirname "$0")"
 
-# Function to display usage.
-usage() {
-    echo "Usage: $0 -t [client|receiver]"
-    echo "  -t    Target to run: 'client' or 'receiver'"
-    echo "Note: Make sure to build the desired target using build.sh before running this script."
+# Check for command line argument.
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <receiver|client>"
+    echo "Note: If running client, make sure to run local_setup.sh and build.sh before running this script."
     exit 1
-}
-
-# Parse command-line arguments.
-while getopts ":t:" opt; do
-    case ${opt} in
-        t )
-            TARGET=${OPTARG}
-            ;;
-        \? | : )
-            usage
-            ;;
-    esac
-done
-
-# Validate target option.
-if [ "$TARGET" != "client" ] && [ "$TARGET" != "receiver" ]; then
-    echo "Error: Invalid or missing target specified."
-    usage
 fi
 
-# Function to run Docker containers.
-run_docker() {
-    local container_name=$1
-
-    echo "Running Docker container for $container_name..."
-    docker run --rm -it "$container_name"
-}
-
-echo "***** Run script started. *****"
-
-# Run Docker container based on target.
-if [ -n "$TARGET" ]; then
-    run_docker "$TARGET"
+if [ $1 == "receiver" ]; then  # On Linux VM (AWS EC2 instance).
+    # --- Commands to run the receiver container. ---
+    # Set display number for VNC server.
+    export DISPLAY=:1
+    # Allow Docker container to connect to X display manager for VNC server.
+    xhost +local:docker
+    # Run Docker container with specific flags:
+    #     -e: Pass display number environment variable.
+    #     -v: Allow visualization to display through X11 forwarding onto host.
+    docker run --gpus all --rm -it -p 8080:8080 -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --network="host" --name receiver lidar_receiver
+    # Finished running, so release.
+    xhost -local:docker
+elif [ $1 == "client" ]; then  # Local.
+    # --- Command to run the client container. ---
+    docker run --rm -it -v "$(pwd)/lidar_client/data:/usr/src/app/data" --name client lidar_client
+else
+    echo "Invalid argument: $1"
+    echo "Please specify 'receiver' or 'client'."
+    exit 1
 fi
-
-echo "***** Run script completed. *****"
