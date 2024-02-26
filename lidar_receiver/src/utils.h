@@ -1,10 +1,11 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include <fstream>
 #include <iostream>
 #include <memory>
-#include <fstream>
 #include <sstream>
+
 #include "nlohmann/json.hpp"
 
 using json = nlohmann::json;

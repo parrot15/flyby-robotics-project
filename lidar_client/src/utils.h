@@ -1,13 +1,14 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include <fstream>
 #include <iostream>
 #include <memory>
-#include <fstream>
 #include <sstream>
+
+#include "nlohmann/json.hpp"
 #include "ouster/os_pcap.h"
 #include "ouster/pcap.h"
-#include "nlohmann/json.hpp"
 
 using json = nlohmann::json;
 
@@ -21,7 +22,8 @@ struct Config {
   std::string json_path;   // Path to LIDAR metadata file.
   int packet_buffer_size;  // The size of the buffer for reading packets.
   int points_per_batch;    // # of points to send per websocket msg.
-  int distance_threshold;  // The max distance from the sensor for points to be considered.
+  int distance_threshold;  // The max distance from the sensor for points to be
+                           // considered.
 };
 
 /**
@@ -37,13 +39,15 @@ Config read_config_file(const std::string& config_path);
  * @param pcap_path The path to the LIDAR data file (.pcap).
  * @return A shared pointer to the initialized playback handle.
  */
-std::shared_ptr<ouster::sensor_utils::playback_handle> read_playback_data(const std::string& pcap_path);
+std::shared_ptr<ouster::sensor_utils::playback_handle> read_playback_data(
+    const std::string& pcap_path);
 
 /**
  * Reads and returns the sensor metadata from a JSON file.
  * @param json_path The path to the LIDAR metadata file (.json).
  * @return A sensor_info struct populated with the metadata from the file.
  */
-ouster::sensor::sensor_info read_playback_metadata(const std::string& json_path);
+ouster::sensor::sensor_info read_playback_metadata(
+    const std::string& json_path);
 
 #endif

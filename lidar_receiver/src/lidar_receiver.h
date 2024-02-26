@@ -1,14 +1,15 @@
 #ifndef LIDAR_RECEIVER_H
 #define LIDAR_RECEIVER_H
 
+#include <boost/asio/connect.hpp>
+#include <boost/asio/ip/tcp.hpp>
+#include <boost/beast/core.hpp>
+#include <boost/beast/websocket.hpp>
 #include <iostream>
 #include <memory>
 #include <thread>
+
 #include "nlohmann/json.hpp"
-#include <boost/beast/core.hpp>
-#include <boost/beast/websocket.hpp>
-#include <boost/asio/connect.hpp>
-#include <boost/asio/ip/tcp.hpp>
 #include "ouster/point_viz.h"
 
 namespace beast = boost::beast;
@@ -20,7 +21,7 @@ using tcp = net::ip::tcp;
 using json = nlohmann::json;
 
 class LidarReceiver {
-  public:
+ public:
   /**
    * Constructor for LidarReceiver.
    * Initializes the receiver with default values.
@@ -39,7 +40,7 @@ class LidarReceiver {
    * @param port The port number to listen on.
    */
   void listen(const std::string& host, int port);
-  
+
   /**
    * Accepts an incoming connection and upgrades it to a WebSocket connection.
    */
@@ -56,7 +57,7 @@ class LidarReceiver {
    */
   void stop();
 
-  private:
+ private:
   net::io_context ioc_;
   std::unique_ptr<tcp::acceptor> acceptor_;
   std::unique_ptr<tcp::socket> tcp_socket_;
@@ -69,7 +70,7 @@ class LidarReceiver {
   /**
    * Read and de-serialize message from websocket.
    * @return The de-serialized JSON.
-  */
+   */
   json read_message() const;
 
   /**
